@@ -1,56 +1,298 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Danh Sách Trực Nhật</title>
-<link href="./Css-Javascript/css2" rel="stylesheet">
-<link rel="shortcut icon" href="./Css-Javascript/SmartTap.png">
-<link rel="preconnect" href="https://fonts.gstatic.com/">
-<link rel="stylesheet" href="./Css-Javascript/home.css">
-<link rel="stylesheet" href="./fontawesome-free-6.7.2-web/css/all.css">
-<link rel="stylesheet" href="./Css-Javascript/cdn.js">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Danh Sách Trực Nhật</title>
+    <link href="./Css-Javascript/css2" rel="stylesheet">
+    <link rel="shortcut icon" href="./Css-Javascript/Screenshot 2025-01-19 090617.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com/css?family=Poppins:400,700,900">
+    <link rel="stylesheet" href="./Css-Javascript/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .section.show {
+            display: block;
+            opacity: 1;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .locked {
+            cursor: not-allowed;
+            color: gray;
+            opacity: 1;
+        }
+        .notification {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.5s ease, bottom 0.5s ease;
+            z-index: 1000;
+        }
+        .notification.show {
+            opacity: 0.8;
+            bottom: 15%;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Thêm thanh cuộn ngang nếu nội dung quá dài */
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-size: 20px;
+            word-wrap: break-word; /* Tự động xuống dòng khi từ quá dài */
+            word-break: break-word; /* Hỗ trợ trình duyệt cũ hơn */
+        }
+        .table th {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+        .note {
+            color: #ff3131;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
 <div id="particles-js"><canvas class="particles-js-canvas-el" width="1108" height="1586" style="width: 100%; height: 100%;"></canvas></div>
 <div class="min-h-full flex-h-center page-bg" id="background_div">
-<div class="background-overlay"></div>
-<div class="mt-36 page-full-wrap relative">
+    <div class="background-overlay"></div>
+    <div class="mt-36 page-full-wrap relative">
+        <h2 class="page-title page-text-color page-text-font mt-16 text-center">Danh Sách Trực Nhật</h2>
+        <h2 class="page-bioline text-fs-16 page-text-color page-text-font mt-8 ln-h-22 text-center">© Created by DuyAnhTran</h2>
+        <div class="mt-32" id="navigation">
+            <div class="page-item-wrap relative">
+                <div class="page-item flex-both-center relative">
+                    <i class="fa-regular fa-calendar icon-large"></i>
+                    <a rel="noopener nofollow" class="page-item-each" href="javascript:void(0);" onclick="navigateTo('week-20')">Tuần 20</a>
+                </div>
+            </div>
+            <div class="page-item-wrap relative">
+                <div class="page-item flex-both-center relative locked">
+                    <i class="fa-regular fa-calendar icon-large"></i>
+                    <a rel="noopener nofollow" class="page-item-each locked" href="javascript:void(0);" onclick="navigateTo('week-21')">Tuần 21</a>
+                </div>
+            </div>
+            <div class="page-item-wrap relative">
+                <div class="page-item flex-both-center relative locked">
+                    <i class="fa-regular fa-calendar icon-large"></i>
+                    <a rel="noopener nofollow" class="page-item-each locked" href="javascript:void(0);" onclick="navigateTo('week-22')">Tuần 22</a>
+                </div>
+            </div>
+            <div class="page-item-wrap relative">
+                <div class="page-item flex-both-center relative locked">
+                    <i class="fa-regular fa-calendar icon-large"></i>
+                    <a rel="noopener nofollow" class="page-item-each locked" href="javascript:void(0);" onclick="navigateTo('discord')">Discord</a>
+                </div>
+            </div>
+            <div class="page-item-wrap relative">
+                <div class="page-item flex-both-center relative locked">
+                    <i class="fa-regular fa-calendar icon-large"></i>
+                    <a rel="noopener nofollow" class="page-item-each locked" href="javascript:void(0);" onclick="navigateTo('github')">Github</a>
+                </div>
+            </div>
+        </div>
 
-<body>
+        <!-- Sections to navigate to -->
+        <div id="week-20" class="section">
+            <div class="container">
+                <h2>Tuần 20</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            
+            <th>25/12/2024</th>
+            <th>26/12/2024</th>
+            <th>27/12/2024</th>
+            <th>30/12/2024</th>
+            <th>31/12/2024</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            
+            <td>Quốc An</td>
+            <td>Mạnh Quân</td>
+            <td>Ân</td>
+            <td>Nguyên</td>
+            <td>Long</td>
+        </tr>
+        <tr>
+            
+            <td>Tâm An</td>
+            <td>Khánh</td>
+            <td>Quỳnh Anh</td>
+            <td>Mai</td>
+            <td>My</td>
+        </tr>
+        <tr>
+            
+            <td>Khôi</td>
+            <td>Khánh Linh</td>
+            <td>Minh Quân</td>
+            <td>Sang</td>
+            <td>Duy</td>
+        </tr>
+        <tr>
+            
+            <td>Khanh</td>
+            <td>Ngọc Linh</td>
+            <td>Nam</td>
+            <td>Trang</td>
+            <td>Vy</td>
+        </tr>
+        </tbody>
+    </table>
 
-
-<h2 class="page-title page-text-color page-text-font mt-16 text-center">Danh Sách Trực Nhật</h2>
-
-<div class="mt-32">
-   <div class="page-item-wrap relative">
-      <div class="page-item flex-both-center relative">
-         <a rel="noopener nofollow" class="page-item-each" href="./Css-Javascript/anh-mau-xanh-duong.jpg" target="_blank">Tuần 20</a>
-      </div>
-   </div>
-   <div class="page-item-wrap relative">
-      <div class="page-item flex-both-center relative">
-         <a rel="noopener nofollow" class="page-item-each" href="https://www.instagram.com/duyanhtran437/?__pwa=1" target="_blank">Tuần 21</a>
-      </div>
-   </div>
-   <div class="page-item-wrap relative">
-      <div class="page-item flex-both-center relative">
-         <a rel="noopener nofollow" class="page-item-each" href="https://www.tiktok.com/@duyanhtran.tranduy?is_from_webapp=1&sender_device=pc" target="_blank">Tuần 22</a>
-      </div>  
-   </div>
-   <div class="page-item-wrap relative">
-      <div class="page-item flex-both-center relative">
-         <a rel="noopener nofollow" class="page-item-each" href="https://discord.com/channels/@duyanhtran3103" target="_blank">Discord</a>
-      </div> 
-   </div>
-   <div class="page-item-wrap relative">
-      <div class="page-item flex-both-center relative">
-         <a rel="noopener nofollow" class="page-item-each" href="https://github.com/tduy313?tab=repositories" target="_blank">Github</a>
-      </div> 
-   </div>
-
-<div class="text-center">
-<br>
-<p style="font-size: 14px; color: gray; font-family: Arial;">© Created by DuyAnhTran</p>
+    <p class="note">Lưu ý: Nếu bạn nào có việc đột xuất thì báo cho LPD sớm để kịp phân bạn thay.</p>
+                <button class="back-button" onclick="goBack()">Quay lại</button>
+            </div>
+        </div>
+        <div id="week-21" class="section">
+            <h3>Tuần 21</h3>
+            <p>Nội dung cho Tuần 21:</p>
+            <ul>
+                <li>Hoạt động 1: Kiểm tra sổ sách</li>
+                <li>Hoạt động 2: Vệ sinh lớp học</li>
+                <li>Hoạt động 3: Chuẩn bị bài giảng</li>
+                <li>Hoạt động 4: Họp nhóm</li>
+                <li>Hoạt động 5: Đánh giá và báo cáo</li>
+            </ul>
+            <button class="back-button" onclick="goBack()">Quay lại</button>
+        </div>
+        <div id="week-22" class="section">
+            Content for Week 22...
+            <button class="back-button" onclick="goBack()">Quay lại</button>
+        </div>
+        <div id="discord" class="section">
+            Content for Discord...
+            <button class="back-button" onclick="goBack()">Quay lại</button>
+        </div>
+        <div id="github" class="section">
+            Content for Github...
+            <button class="back-button" onclick="goBack()">Quay lại</button>
+        </div>
+    </div>
 </div>
-</div>
-</div>
-</div>
-<script type="text/javascript" src="./Css-Javascript/p.js"></script>
-</body><div class="troywell-avia"></div><div class="troywell-caa"></div></html>
+<div id="notification" class="notification"></div>
+
+<script>
+    const unlockTimes = {
+        'week-21': new Date('2025-01-20T00:00:00'),
+        'week-22': new Date('2025-01-27T00:00:00'),
+        'discord': new Date('2025-02-03T00:00:00'),
+        'github': new Date('2025-02-10T00:00:00')
+    };
+
+    function navigateTo(id) {
+        const now = new Date();
+
+        if (unlockTimes[id] && now < unlockTimes[id]) {
+            showNotification('Đang cập nhật');
+            return;
+        }
+
+        // Hide all sections
+        const sections = document.getElementsByClassName('section');
+        for (let i = 0; i < sections.length; i++) {
+            sections[i].style.display = 'none';
+            sections[i].classList.remove('show');
+        }
+
+        // Show the selected section
+        const section = document.getElementById(id);
+        section.style.display = 'block';
+        setTimeout(() => section.classList.add('show'), 10);
+
+        // Hide the navigation
+        document.getElementById('navigation').style.display = 'none';
+    }
+
+    function goBack() {
+        // Hide all sections
+        const sections = document.getElementsByClassName('section');
+        for (let i = 0; i < sections.length; i++) {
+            sections[i].style.display = 'none';
+            sections[i].classList.remove('show');
+        }
+
+        // Show the navigation
+        const navigation = document.getElementById('navigation');
+        navigation.style.display = 'block';
+        setTimeout(() => navigation.classList.add('show'), 10);
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+</script>
+</body>
+</html>
